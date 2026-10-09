@@ -1,0 +1,52 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Engine tests (headless)
+        run: |
+          mkdir -p build/coretest
+          find app/src/main/java/com/droidmaker/core -name '*.java' > build/core.txt
+          javac -d build/coretest @build/core.txt tools/coretest/CoreTest.java
+          java -cp build/coretest CoreTest
+
+      - name: Build APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Collect APK
+        run: cp app/build/outputs/apk/release/app-release.apk DroidMaker.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DroidMaker-apk
+          path: DroidMaker.apk
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="build-${{ github.run_number }}"
+          gh release create "$TAG" DroidMaker.apk \
+            --title "DroidMaker build ${{ github.run_number }}" \
+            --notes "Automatic build of ${{ github.sha }}. Download DroidMaker.apk below and open it on your phone to install." \
+            --latest

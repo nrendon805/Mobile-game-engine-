@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">#1F232B</item>
+        <item name="android:colorPrimaryDark">#15171C</item>
+        <item name="android:colorAccent">#4FA3FF</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">#15171C</item>
+        <item name="android:navigationBarColor">#15171C</item>
+        <item name="android:textColor">#E8ECF2</item>
+        <item name="android:textColorPrimary">#E8ECF2</item>
+        <item name="android:textColorSecondary">#9AA3B2</item>
+    </style>
+
+    <style name="GameTheme" parent="android:Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

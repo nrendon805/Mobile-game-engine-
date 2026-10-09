@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.droidmaker'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.droidmaker'
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        // A fixed key checked into the repo so every CI build can update the previous install.
+        fixed {
+            storeFile file('droidmaker.keystore')
+            storePassword 'droidmaker'
+            keyAlias 'droidmaker'
+            keyPassword 'droidmaker'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.fixed
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.fixed
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
