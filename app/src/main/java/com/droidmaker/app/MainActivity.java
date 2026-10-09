@@ -155,13 +155,22 @@ public final class MainActivity extends BaseActivity {
 
     private void makeDemos(boolean ask) {
         Runnable make = () -> {
-            try {
-                DemoProjects.createAll(this, App.store());
-                Dialogs.toast(this, "Demo projects created");
-            } catch (Exception ex) {
-                Dialogs.message(this, "Demo creation failed", String.valueOf(ex));
-            }
-            refresh();
+            Dialogs.toast(this, "Creating demo projects…");
+            new Thread(() -> {
+                String err = null;
+                try {
+                    DemoProjects.createAll(this, App.store());
+                } catch (Exception ex) {
+                    err = String.valueOf(ex);
+                }
+                String e = err;
+                runOnUiThread(() -> {
+                    if (isFinishing()) return;
+                    if (e != null) Dialogs.message(this, "Demo creation failed", e);
+                    else Dialogs.toast(this, "Demo projects created");
+                    refresh();
+                });
+            }).start();
         };
         if (ask) Dialogs.confirm(this, "Add demo projects?", "Creates a 2D platformer, a 2.5D raycast maze and a 3D world you can play and study.", "Create", make);
         else make.run();
