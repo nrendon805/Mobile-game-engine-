@@ -1,5 +1,6 @@
 import com.droidmaker.core.json.Json;
 import com.droidmaker.core.lang.*;
+import com.droidmaker.core.lang.Compiler;
 import com.droidmaker.core.project.*;
 import com.droidmaker.core.runtime.*;
 
